@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.0.1] - 2026-11-08
+### Fixed
+- Mengaktifkan `synchronize: true` secara default pada konfigurasi TypeORM di `src/app.module.ts` dan `.env` serta menambahkan klausa `IF NOT EXISTS` pada file migration agar tabel `stalls`, `menus`, `orders`, dan `order_items` otomatis terbentuk di PostgreSQL tanpa error 500.
+
 ## [v1.0.0] - 2026-11-08
 ### Added
 - Konfigurasi global prefix `/api`, URI Versioning `/api/v1/...`, global `ValidationPipe` (`whitelist`, `forbidNonWhitelisted`, `transform`), dan `ProblemDetailsExceptionFilter` sesuai standar RFC 7807 / RFC 9457.

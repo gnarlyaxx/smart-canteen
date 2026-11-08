@@ -7,7 +7,7 @@ export class InitialSmartCanteenSchema1730000000000
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      CREATE TABLE "stalls" (
+      CREATE TABLE IF NOT EXISTS "stalls" (
         "id" SERIAL NOT NULL,
         "name" character varying(150) NOT NULL,
         "location" character varying(255) NOT NULL,
@@ -20,7 +20,7 @@ export class InitialSmartCanteenSchema1730000000000
     `);
 
     await queryRunner.query(`
-      CREATE TABLE "menus" (
+      CREATE TABLE IF NOT EXISTS "menus" (
         "id" SERIAL NOT NULL,
         "stall_id" integer NOT NULL,
         "name" character varying(150) NOT NULL,
@@ -41,7 +41,7 @@ export class InitialSmartCanteenSchema1730000000000
     `);
 
     await queryRunner.query(`
-      CREATE TABLE "orders" (
+      CREATE TABLE IF NOT EXISTS "orders" (
         "id" SERIAL NOT NULL,
         "customer_name" character varying(150) NOT NULL,
         "table_number" character varying(50) NOT NULL,
@@ -54,7 +54,7 @@ export class InitialSmartCanteenSchema1730000000000
     `);
 
     await queryRunner.query(`
-      CREATE TABLE "order_items" (
+      CREATE TABLE IF NOT EXISTS "order_items" (
         "id" SERIAL NOT NULL,
         "order_id" integer NOT NULL,
         "menu_id" integer NOT NULL,

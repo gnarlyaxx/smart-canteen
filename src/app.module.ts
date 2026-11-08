@@ -32,7 +32,7 @@ function buildTypeOrmOptions(): TypeOrmModuleOptions {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME ?? 'smart_canteen_db',
     entities: [Stall, Menu, Order, OrderItem],
-    synchronize: process.env.DB_SYNCHRONIZE === 'true',
+    synchronize: process.env.DB_SYNCHRONIZE !== 'false',
   };
 }
 
