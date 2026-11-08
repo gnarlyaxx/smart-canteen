@@ -206,6 +206,13 @@ npm run test:e2e
 
 ---
 
+### SWAGGER UI
+![SWAGGER UI](./assets/swagger_UI1.png)
+
+### SWAGGER UI
+![SWAGGER UI](./assets/swagger_UI2.png)
+
+
 ## Laporan Singkat Evaluasi Hasil Pengujian
 
 Berdasarkan hasil eksekusi **Unit Test** (`menus.service.spec.ts` dan `orders.service.spec.ts`) serta **End-to-End (E2E) Test** (`test/app.e2e-spec.ts`), seluruh endpoint pada aplikasi **Smart Canteen REST API** telah memenuhi spesifikasi kontrak API Pertemuan 1 hingga Pertemuan 7:
