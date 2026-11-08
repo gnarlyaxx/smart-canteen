@@ -131,10 +131,18 @@ npm run start:dev
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/v1/menus` | Mengambil daftar menu dengan **Filtering** (`category`, `stall_id`, `min_price`, `max_price`), **Offset Pagination** (`page`, `limit` -> `{ data, meta }`), & **Tie-breaker Sorting** (`sort`, default `created_at:desc,id:asc`) | `200 OK`, `400 Bad Request` |
 | `GET` | `/api/v1/menus/:id` | Mengambil detail menu & menyertakan response header `ETag` (contoh: `"v1"`) | `200 OK`, `404 Not Found` |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/get_menus.png)
 | `POST` | `/api/v1/menus` | Menambahkan menu baru (`price >= 1000`, `stock >= 0`, `name` unik) | `201 Created`, `400 Bad Request`, `404 Not Found`, `409 Conflict` |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/add_menus1.png)
 | `PUT` | `/api/v1/menus/:id` | Memperbarui seluruh data menu (mendukung Optimistic Locking via header `If-Match`) | `200 OK`, `400`, `404`, `409`, `412 Precondition Failed` |
 | `PATCH` | `/api/v1/menus/:id` | Memperbarui sebagian data menu (mendukung Optimistic Locking via header `If-Match`) | `200 OK`, `400`, `404`, `409`, `412 Precondition Failed` |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/add_menus2.png)
 | `DELETE` | `/api/v1/menus/:id` | Menghapus menu berdasarkan ID | `204 No Content`, `404 Not Found` |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/delete_menus.png)
 
 ### 3. Resource `Orders` (`/api/v1/orders`)
 | Method | URI | Deskripsi | Status Code |
@@ -159,6 +167,8 @@ Seluruh error (`400`, `404`, `409`, `412`, `500`) diformat secara konsisten oleh
   "instance": "/api/v1/menus"
 }
 ```
+### Bukti Postman
+![Bukti Postman](./assets/conflict_409.png)
 
 ---
 
@@ -180,10 +190,18 @@ npm run test:e2e
 | **TC-03** | **1. Skenario Berhasil** | `PATCH /api/v1/menus/:id` | Header `If-Match: "v1"` sesuai ETag saat ini | `200 OK`, harga ter-update, `version` naik menjadi `2`, header `ETag: "v2"` | PASS |
 | **TC-04** | **1. Skenario Berhasil** | `POST /api/v1/orders` | `items` valid dan stok mencukupi | `201 Created`, `total_price` akurat, stok menu terpotong dan transaksi di-*commit* | PASS |
 | **TC-05** | **2. Validasi Gagal (400)** | `POST /api/v1/menus` | `price: -5000` (di bawah batas minimum Rp 1.000) | `400 Bad Request` dengan format Problem Details (`https://smartcanteen.ac.id/errors/bad-request`) | PASS |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/price_minus.png)
 | **TC-06** | **2. Validasi Gagal & Rollback (400)** | `POST /api/v1/orders` | Item ke-1 stok cukup (`qty: 3`), item ke-2 stok kurang (`qty: 99`) | `400 Bad Request` ("Stok menu tidak mencukupi") & **Rollback Transaksi** menjaga stok item ke-1 tetap utuh (`8`) | PASS |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/stock_unavailable.png)
 | **TC-07** | **3. Data Tidak Ditemukan (404)** | `GET /api/v1/menus/99999` & `GET /api/v1/orders/99999` | Parameter ID tidak terdaftar di database | `404 Not Found` dengan format Problem Details (`https://smartcanteen.ac.id/errors/not-found`) | PASS |
+### Bukti Pengujian Postman
+![Bukti Pengujian](./assets/404_not_found.png)
 | **TC-08** | **3. Data Tidak Ditemukan & Rollback (404)** | `POST /api/v1/orders` | Array `items` memuat `menu_id: 88888` yang tidak terdaftar | `404 Not Found` & **Rollback Transaksi** menjaga stok item lain tidak terpotong | PASS |
 | **TC-09** | **4. Konflik Data (409)** | `POST /api/v1/menus` & `POST /api/v1/stalls` | Mengirim `name` menu atau stan yang sudah pernah didaftarkan | `409 Conflict` dengan format Problem Details (`https://smartcanteen.ac.id/errors/conflict`) | PASS |
+### Bukti Postman
+![Bukti Postman](./assets/conflict_409.png)
 | **TC-10** | **4. Konflik Optimistic Locking (412)** | `PUT /api/v1/menus/:id` | Mengirim header `If-Match: "v1"` padahal versi menu di server sudah meningkat | `412 Precondition Failed` dengan format Problem Details (`https://smartcanteen.ac.id/errors/precondition-failed`) | PASS |
 
 ---
